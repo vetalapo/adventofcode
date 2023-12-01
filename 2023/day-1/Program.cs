@@ -3,11 +3,27 @@ using System.IO;
 
 namespace AdventOfCode;
 
-public class Solution 
+public class Program 
 {
+    private static readonly Dictionary<string, int> numSet = new Dictionary<string, int>
+    {
+        { "one", 1 },
+        { "two", 2 },
+        { "three", 3 },
+        { "four", 4 },
+        { "five", 5 },
+        { "six", 6 },
+        { "seven", 7 },
+        { "eight", 8 },
+        { "nine", 9 },
+    };
+
+    private static readonly HashSet<char> numHash = new( new char[] { 'o', 't', 'f', 's', 'e', 'n' } );
+    private static readonly HashSet<char> numHashDesc = new( new char[] { 'e', 'o', 'r', 'x', 'n', 't' } );
+
     static void Main( string[] args )
     {
-        if ( args.Count() != 1 )
+        if ( args.Length != 1 )
         {
             Console.WriteLine( "Invalid input" );
 
@@ -26,7 +42,7 @@ public class Solution
 
         using StreamReader sr = File.OpenText( inputFile );
 
-        string line = string.Empty;
+        string? line = string.Empty;
 
         int sum = 0;
 
@@ -42,29 +58,96 @@ public class Solution
 
     private static int CalibrationValue ( string input )
     {
+        if ( String.IsNullOrEmpty(input) )
+        {
+            return 0;
+        }
+
         int left = 0;
         int right = input.Length - 1;
 
+        int leftNum = 0;
+        int rightNum = 0;
+
         while( left <= right )
         {
-            bool isLeftDigit = Char.IsDigit( input[left] );
-            bool isRightDigit = Char.IsDigit( input[right] );
-            
-            if ( isLeftDigit && isRightDigit ) {
+            char leftChar = input[left];
+            char rightChar = input[right];
+
+            // Digit Check
+            if ( leftNum > 0 && rightNum > 0 )
+            {
                 break;
             }
 
-            if ( !isLeftDigit ) {
+            if ( leftNum == 0 && Char.IsDigit( leftChar ) )
+            {
+                leftNum = (int)Char.GetNumericValue( leftChar );
+            }
+
+            if ( rightNum == 0 && Char.IsDigit( rightChar ) )
+            {
+                rightNum = (int)Char.GetNumericValue( rightChar );
+            }
+
+            // Text Check
+            if ( leftNum == 0 && numHash.Contains( leftChar ) )
+            {
+                leftNum = WordCheck( input, left );
+            }
+
+            if ( rightNum == 0 && numHashDesc.Contains( rightChar ) )
+            {
+                rightNum = WordCheckDesk( input, right );
+            }
+
+            // Updating pointers
+            if ( leftNum == 0 )
+            {
                 left++;
             }
 
-            if ( !isRightDigit ) {
+            if ( rightNum == 0 )
+            {
                 right--;
             }
         }
 
-        int.TryParse( $"{input[left]}{input[right]}", out int result );
+        // Assemble result
+        bool conversionResult = int.TryParse( $"{leftNum}{rightNum}", out int result );
 
-        return result;
+        Console.WriteLine( $"{input} - {result}" );
+
+        return conversionResult ? result : 0;
+    }
+
+    private static int WordCheck ( string input, int index )
+    {
+        for ( int i = index, j = 1; i < input.Length && j <= 5; i++, j++ )
+        {
+            string currentPortion = input.Substring( index, j );
+
+            if ( numSet.ContainsKey( currentPortion ) )
+            {
+                return numSet[currentPortion];
+            }
+        }
+
+        return 0;
+    }
+
+    private static int WordCheckDesk ( string input, int index )
+    {
+        for ( int right = index, j = 1; right >= 0 && j <= 5; right--, j++ )
+        {
+            string currentPortion = input.Substring( right, j );
+
+            if ( numSet.ContainsKey( currentPortion ) )
+            {
+                return numSet[currentPortion];
+            }
+        }
+
+        return 0;
     }
 }
