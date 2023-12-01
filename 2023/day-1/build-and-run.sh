@@ -6,4 +6,4 @@ dotnet build --configuration Release
 echo
 echo
 
-dotnet run
+dotnet run input.txt
