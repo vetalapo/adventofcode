@@ -48,12 +48,10 @@ public class Program
 
         while ( ( line = sr.ReadLine() ) is not null )
         {
-            int currentCalibrationValue = CalibrationValue( line );
-
-            sum += currentCalibrationValue;
+            sum += CalibrationValue( line );
         }
 
-        Console.WriteLine( $"\r\n\r\nDone!\r\nResult: {sum}" );
+        Console.WriteLine( $"\r\nDone!\r\nResult: {sum}" );
     }
 
     private static int CalibrationValue ( string input )
@@ -113,12 +111,9 @@ public class Program
             }
         }
 
-        // Assemble result
-        bool conversionResult = int.TryParse( $"{leftNum}{rightNum}", out int result );
-
-        Console.WriteLine( $"{input} - {result}" );
-
-        return conversionResult ? result : 0;
+        return int.TryParse( $"{leftNum}{rightNum}", out int result )
+                   ? result
+                   : 0;
     }
 
     private static int WordCheck ( string input, int index )
