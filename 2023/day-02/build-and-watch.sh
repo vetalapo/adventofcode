@@ -14,7 +14,7 @@ echo "Building the Program..."
 
 dotnet build --configuration Release
 
-echo "Running now..."
+echo "Watching now..."
 echo
 
 dotnet watch input.txt
