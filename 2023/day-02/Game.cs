@@ -16,6 +16,19 @@ public class Game
         this.CubeSet = cubeSet;
     }
 
+    public static IEnumerable<Game> GetGamesFromFile( string filePath )
+    {
+        if ( !File.Exists( filePath ) )
+        {
+            throw new FileNotFoundException( $"File [{filePath}] does not exist" );
+        }
+        
+        foreach ( string line in File.ReadLines( filePath ) )
+        {
+            yield return Game.Parse( line );
+        }
+    }
+
     public static Game Parse( string input )
     {
         string[] gameParts = input.Split( ':' );

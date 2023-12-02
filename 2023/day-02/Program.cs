@@ -15,21 +15,7 @@ public class Program
             return;
         }
 
-        string inputFile = args[0];
-
-        if ( !File.Exists( inputFile ) )
-        {
-            WriteLine( $"File [{inputFile}] does not exist" );
-            
-            return;
-        }
-
-        List<Game> games = [];
-        
-        foreach ( string line in File.ReadLines( inputFile ) )
-        {
-            games.Add( Game.Parse( line ) );
-        }
+        IEnumerable<Game> games = Game.GetGamesFromFile( args[0] );
 
         IEnumerable<int> notValidGames = games
             .Where( x => x.CubeSet.Any( y => y
@@ -42,6 +28,6 @@ public class Program
             .Select( x => x.Id )
             .Except( notValidGames );
 
-        WriteLine( $"Result: { validGames.Sum() }" );
+        WriteLine( $"The sum of the IDs of valid games: { validGames.Sum() }" );
     }
 }
