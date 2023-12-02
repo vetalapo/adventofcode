@@ -4,67 +4,35 @@ public class Game
 {
     public int Id { get; set; }
 
-    public List<List<Cube>> CubeSet { get; set; } = [];
+    public IEnumerable<IEnumerable<Cube>> CubeSet { get; set; } = [];
 
-    public static Game ParseGame( string input )
+    public Game()
     {
-        var result = new Game();
+    }
 
+    public Game( int id, IEnumerable<IEnumerable<Cube>> cubeSet )
+    {
+        this.Id = id;
+        this.CubeSet = cubeSet;
+    }
+
+    public static Game Parse( string input )
+    {
         string[] gameParts = input.Split( ':' );
 
         // Id
-        int.TryParse( gameParts[0].Split( ' ' )[1], out int gameId );
-        result.Id = gameId;
+        int id = Game.ParseId( gameParts[0] );
 
         // Cube Sets
-        string[] cubeSets = gameParts[1].Split( ';' );
+        IEnumerable<IEnumerable<Cube>> set = Cube.ParseSets( gameParts[1] );
 
-        foreach ( string set in cubeSets )
-        {
-            List<Cube> cubes = [];
-
-            foreach ( string cube in set.Split( ',' ) )
-            {
-                Cube parsedCube = new();
-
-                string[] cubeParts = cube.Trim().Split( ' ' );
-
-                // Amount of cubes
-                int.TryParse( cubeParts[0], out int amount );
-                parsedCube.Amount = amount;
-
-                // Color
-                parsedCube.Color = Cube.ConvertColor( cubeParts[1] );
-
-                cubes.Add( parsedCube );
-            }
-
-            result.CubeSet.Add( cubes );
-        }
-
-        return result;
+        return new Game( id, set );
     }
-}
 
-public class Cube
-{
-    public Color Color { get; set; }
-
-    public int Amount { get; set; } = 0;
-
-    public static Color ConvertColor( string input ) => input switch
+    private static int ParseId( string input )
     {
-        "red" => Color.Red,
-        "green" => Color.Green,
-        "blue" => Color.Blue,
-        _ => Color.no_color_set
-    };
-}
+        int.TryParse( input.Split( ' ' )[1], out int gameId );
 
-public enum Color
-{
-    no_color_set,
-    Red,
-    Green,
-    Blue
+        return gameId;
+    }
 }
