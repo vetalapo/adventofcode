@@ -24,7 +24,7 @@ public class Cube
         int.TryParse( cubeParts[0], out int amount );
 
         // Color
-        Color color = Cube.ConvertColor( cubeParts[1] );
+        Color color = ConvertColor( cubeParts[1] );
 
         return new Cube( color, amount );
     }
@@ -35,7 +35,7 @@ public class Cube
 
         foreach ( string set in cubeSets )
         {
-            yield return Cube.ParseSingleSet( set );
+            yield return ParseSingleSet( set );
         }
     }
 
@@ -43,7 +43,7 @@ public class Cube
     {
         foreach ( string cube in input.Split( ',' ) )
         {
-            yield return Cube.Parse( cube );
+            yield return Parse( cube );
         }
     }
 

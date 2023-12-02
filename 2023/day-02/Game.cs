@@ -25,7 +25,7 @@ public class Game
         
         foreach ( string line in File.ReadLines( filePath ) )
         {
-            yield return Game.Parse( line );
+            yield return Parse( line );
         }
     }
 
@@ -34,7 +34,7 @@ public class Game
         string[] gameParts = input.Split( ':' );
 
         // Id
-        int id = Game.ParseId( gameParts[0] );
+        int id = ParseId( gameParts[0] );
 
         // Cube Sets
         IEnumerable<IEnumerable<Cube>> set = Cube.ParseSets( gameParts[1] );
