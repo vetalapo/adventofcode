@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using static System.Console;
 
 namespace AdventOfCode;
 
 public class Program 
 {
-    private static readonly Dictionary<string, int> numSet = new Dictionary<string, int>
+    private static readonly Dictionary<string, int> numSet = new()
     {
         { "one", 1 },
         { "two", 2 },
@@ -15,7 +16,7 @@ public class Program
         { "six", 6 },
         { "seven", 7 },
         { "eight", 8 },
-        { "nine", 9 },
+        { "nine", 9 }
     };
 
     private static readonly HashSet<char> numHash = new( new char[] { 'o', 't', 'f', 's', 'e', 'n' } );
@@ -25,7 +26,7 @@ public class Program
     {
         if ( args.Length != 1 )
         {
-            Console.WriteLine( "Invalid input" );
+            WriteLine( "Invalid input" );
 
             return;
         }
@@ -34,7 +35,7 @@ public class Program
 
         if ( !File.Exists(inputFile) )
         {
-            Console.WriteLine( $"File [{inputFile}] does not exist" );
+            WriteLine( $"File [{inputFile}] does not exist" );
 
             return;
         }
@@ -51,12 +52,12 @@ public class Program
             sum += CalibrationValue( line );
         }
 
-        Console.WriteLine( $"\r\nDone!\r\nResult: {sum}" );
+        WriteLine( $"Done!\r\nResult: {sum}" );
     }
 
     private static int CalibrationValue ( string input )
     {
-        if ( String.IsNullOrEmpty(input) )
+        if ( string.IsNullOrEmpty(input) )
         {
             return 0;
         }
@@ -88,7 +89,7 @@ public class Program
                 rightNum = (int)Char.GetNumericValue( rightChar );
             }
 
-            // Text Check
+            // Text Portion Check
             if ( leftNum == 0 && numHash.Contains( leftChar ) )
             {
                 leftNum = WordCheck( input, left );
@@ -122,9 +123,9 @@ public class Program
         {
             string currentPortion = input.Substring( index, j );
 
-            if ( numSet.ContainsKey( currentPortion ) )
+            if ( numSet.TryGetValue( currentPortion, out int value ) )
             {
-                return numSet[currentPortion];
+                return value;
             }
         }
 
@@ -137,9 +138,9 @@ public class Program
         {
             string currentPortion = input.Substring( right, j );
 
-            if ( numSet.ContainsKey( currentPortion ) )
+            if ( numSet.TryGetValue( currentPortion, out int value ) )
             {
-                return numSet[currentPortion];
+                return value;
             }
         }
 
