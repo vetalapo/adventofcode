@@ -19,6 +19,11 @@ public class Program
             throw new FileNotFoundException( $"No file at: {filePath}" );
         }
 
-        WriteLine( $"Hello day-04. Input [{filePath}]" );
+        List<Card> cards = Card.ParseFile( filePath ).ToList();
+
+        // Part I
+        int cardsPointsSum = cards.Sum( c => c.Points );
+
+        WriteLine( $"Colorful cards worth in total: {cardsPointsSum} points" );
     }
 }
