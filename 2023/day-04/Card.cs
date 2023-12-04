@@ -4,6 +4,8 @@ public class Card
 {
     public int Number { get; private set; }
 
+    public int Copies { get; private set; }
+
     public HashSet<int> Winning { get; private set; } = [];
 
     public HashSet<int> Have { get; private set; } = [];
@@ -40,6 +42,11 @@ public class Card
         {
             return WinningNumbers().Count();
         }
+    }
+
+    public void AddUpCopy()
+    {
+        this.Copies++;
     }
 
     public static IEnumerable<Card> ParseFile( string path )
