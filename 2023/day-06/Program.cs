@@ -13,11 +13,16 @@ public class Program
             inputFilePath = args[0];
         }
 
-        IEnumerable<Race> races = Race.Parse( inputFilePath );
-
         // Part I
-        IEnumerable<int> amountPossibleWins = Race.CalcAmountPossibleWins( races );
+        IEnumerable<Race> races = Race.Parse( inputFilePath );
+        IEnumerable<long> amountPossibleWins = Race.CalcAmountPossibleWins( races );
 
-        WriteLine( $"The number of ways to beat the record in each race: {amountPossibleWins.Aggregate( 1, (acc, next) => acc *= next )}" );
+        WriteLine( $"The number of ways to beat the record in  each  race: {amountPossibleWins.Aggregate( 1, (acc, next) => acc *= (int)next )}" );
+
+        // Part II
+        Race singleRace = Race.ParseAsSingle( inputFilePath );
+        long singlePossibleWins = Race.CalcAmountPossibleWins( new List<Race>() { singleRace } ).FirstOrDefault();
+
+        WriteLine( $"The number of ways to beat the record in single race: {singlePossibleWins}" );
     }
 }
