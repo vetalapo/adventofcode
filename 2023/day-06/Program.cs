@@ -6,18 +6,18 @@ public class Program
 {
     public static void Main( string[] args )
     {
-        string inputFilePath = "itput.txt";
+        string inputFilePath = "input.txt";
 
         if ( args.Length > 0 && !String.IsNullOrWhiteSpace( args[0] ) )
         {
             inputFilePath = args[0];
         }
 
-        if ( !File.Exists( inputFilePath ) )
-        {
-            throw new FileNotFoundException( $"Input file is not found at [{inputFilePath}]" );
-        }
+        IEnumerable<Race> races = Race.Parse( inputFilePath );
 
-        WriteLine( $"Day 6 of Advent of Code! File path: [{inputFilePath}]" );
+        // Part I
+        IEnumerable<int> amountPossibleWins = Race.CalcAmountPossibleWins( races );
+
+        WriteLine( $"The number of ways to beat the record in each race: {amountPossibleWins.Aggregate( 1, (acc, next) => acc *= next )}" );
     }
 }
