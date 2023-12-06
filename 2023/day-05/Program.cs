@@ -16,6 +16,9 @@ public class Program
         MapsParser maps = new( filePath );
 
         // Part I
-        WriteLine( $"Lowest location number: {maps.Locations.Min()}" );
+        WriteLine( $"Lowest location number: {maps.CalculateLocations( maps.Seeds ).Min()}" );
+
+        // Part II
+        WriteLine( $"Lowest location number that corresponds to any of the initial seed numbers: {maps.CalculateMinLocationLowMemory()}" );
     }
 }

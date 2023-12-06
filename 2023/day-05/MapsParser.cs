@@ -3,6 +3,8 @@ namespace AdventOfCode;
 public class MapsParser
 {
     private readonly IEnumerable<long> _seeds = [];
+
+    private readonly IEnumerable<long> _fullyRangedSeeds = [];
     
     private readonly Dictionary<string, List<(long source, long destination, long length)>> _maps = new()
     {
@@ -14,8 +16,6 @@ public class MapsParser
         { "temperature-to-humidity", new List<(long min, long max, long length)>() },
         { "humidity-to-location", new List<(long min, long max, long length)>() }
     };
-
-    private readonly IEnumerable<long> _locations = [];
 
     public MapsParser( string filePath )
     {
@@ -56,15 +56,7 @@ public class MapsParser
             PopulateMap( currentMap, lineDigits, ref this._maps );
         }
 
-        this._locations = CalculateLocations( this._seeds, this._maps );
-    }
-
-    public IEnumerable<long> Locations
-    {
-        get
-        {
-            return this._locations;
-        }
+        // this._fullyRangedSeeds = CalculateSeedRanges( _seeds.ToArray() );
     }
 
     public Dictionary<string, List<(long source, long destination, long length)>> Maps
@@ -83,19 +75,27 @@ public class MapsParser
         }
     }
 
-    private static IEnumerable<long> CalculateLocations( IEnumerable<long> seeds, Dictionary<string, List<(long source, long destination, long length)>> maps )
+    public IEnumerable<long> FullyRangedSeeds
     {
-        foreach ( long seed in seeds )
+        get
         {
-            yield return Location( seed, ref maps );
+            return this._fullyRangedSeeds;
         }
     }
 
-    private static long Location( long seed, ref Dictionary<string, List<(long source, long destination, long length)>> maps )
+    public IEnumerable<long> CalculateLocations( IEnumerable<long> seeds )
+    {
+        foreach ( long seed in seeds )
+        {
+            yield return Location( seed );
+        }
+    }
+
+    private long Location( long seed )
     {
         long cursor = seed;
 
-        foreach( KeyValuePair<string, List<(long source, long destination, long length)>> map in maps )
+        foreach( KeyValuePair<string, List<(long source, long destination, long length)>> map in this._maps )
         {
             foreach ( (long source, long destination, long length) in map.Value )
             {
@@ -111,6 +111,46 @@ public class MapsParser
         }
 
         return cursor;
+    }
+
+    private static long[] CalculateSeedRanges( long[] list )
+    {
+        List<long> result = [];
+
+        for ( int i = 0; i < list.Length; i += 2 )
+        {
+            long numStart = list[i];
+            long numEnd = numStart + list[i + 1] - 1;
+
+            do
+            {
+                result.Add( numStart );
+                numStart++;
+            }
+            while ( numStart <= numEnd );
+        }
+
+        return [.. result];
+    }
+
+    public long CalculateMinLocationLowMemory()
+    {
+        long result = long.MaxValue;
+
+        long[] seeds = this._seeds.ToArray();
+
+        for ( int i = 0; i < seeds.Length; i += 2 )
+        {
+            long numStart = seeds[i];
+            long numEnd = numStart + seeds[i + 1] - 1;
+
+            for ( long cursor = numStart; cursor <= numEnd; cursor++ )
+            {
+                result = Math.Min( result, Location( cursor ) );
+            }
+        }
+
+        return result;
     }
 
     private static IEnumerable<long> ParseNumbersLine( string input )
