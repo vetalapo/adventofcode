@@ -2,21 +2,21 @@ namespace AdventOfCode;
 
 public class Hand : IComparable
 {
-    private static readonly Dictionary<char, Label> _labelMap = new()
+    private static readonly Dictionary<char, byte> _labelMap = new()
     {
-        { 'A', Label.A },
-        { 'K', Label.K },
-        { 'Q', Label.Q },
-        { 'J', Label.J },
-        { 'T', Label.T },
-        { '9', Label._9 },
-        { '8', Label._8 },
-        { '7', Label._7 },
-        { '6', Label._6 },
-        { '5', Label._5 },
-        { '4', Label._4 },
-        { '3', Label._3 },
-        { '2', Label._2 }
+        { 'A', 1 },
+        { 'K', 2 },
+        { 'Q', 3 },
+        { 'J', 4 },
+        { 'T', 5 },
+        { '9', 6 },
+        { '8', 7 },
+        { '7', 8 },
+        { '6', 9 },
+        { '5', 10 },
+        { '4', 11 },
+        { '3', 12 },
+        { '2', 13 }
     };
 
     public string Value { get; private set; } = string.Empty;
@@ -27,11 +27,11 @@ public class Hand : IComparable
 
     public Hand() { }
 
-    public Hand( string value, int bid )
+    public Hand( string value, int bid, bool isJokerWildcard = false )
     {
         this.Value = value;
         this.Bid = bid;
-        this.Type = CalcType( value );
+        this.Type = CalcType( value, isJokerWildcard );
     }
 
     public override string ToString()
@@ -41,29 +41,29 @@ public class Hand : IComparable
 
     public int CompareTo( object? obj )
     {
-        if ( obj is null )
-        {
-            return 1;
-        }
+        return Compare( this, obj, _labelMap );
+    }
 
-        if ( obj is not Hand otherHand )
+    public static int Compare( object? a, object? b, Dictionary<char, byte> labelMap )
+    {
+        if ( a is not Hand aHand || b is not Hand bHand )
         {
             throw new ArgumentException( $"Object is not {nameof(Hand)}" );
         }
 
-        if ( this.Type < otherHand.Type )
+        if ( aHand.Type < bHand.Type )
         {
             return 1;
         }
-        else if ( this.Type > otherHand.Type )
+        else if ( aHand.Type > bHand.Type )
         {
             return -1;
         }
 
-        for ( int i = 0; i < this.Value.Length; i++ )
+        for ( int i = 0; i < aHand.Value.Length; i++ )
         {
-            Label thisCard = _labelMap[this.Value[i]];
-            Label otherCard = _labelMap[otherHand.Value[i]];
+            byte thisCard = labelMap[aHand.Value[i]];
+            byte otherCard = labelMap[bHand.Value[i]];
 
             if ( thisCard < otherCard )
             {
@@ -78,7 +78,7 @@ public class Hand : IComparable
         return 0;
     }
 
-    public static IEnumerable<Hand> Parse( string inputFilePath )
+    public static IEnumerable<Hand> Parse( string inputFilePath, bool isJokerWildcard = false )
     {
         if ( !File.Exists( inputFilePath ) )
         {
@@ -91,11 +91,11 @@ public class Hand : IComparable
 
             int.TryParse( lineParts[1], out int bid );
 
-            yield return new Hand( lineParts[0].Trim(), bid );
+            yield return new Hand( lineParts[0].Trim(), bid, isJokerWildcard );
         }
     }
 
-    private static HandType CalcType( string handValue )
+    private static HandType CalcType( string handValue, bool isJokerWildcard = false )
     {
         Dictionary<char, int> countMap = [];
 
@@ -103,6 +103,16 @@ public class Hand : IComparable
         {
             countMap.TryAdd( c, 0 );
             countMap[c]++;
+        }
+
+        if ( isJokerWildcard && countMap.TryGetValue( 'J', out int jokerCardAmount ) && countMap.Count > 1 )
+        {
+            char maxCard = countMap
+                .Where( x => x.Key != 'J' )
+                .Aggregate( (l, r) => l.Value > r.Value ? l : r ).Key;
+
+            countMap[maxCard] += jokerCardAmount;
+            countMap.Remove( 'J' );
         }
 
         int maxRepeated = countMap.Values.Max();
