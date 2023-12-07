@@ -19,7 +19,7 @@ public class Program
         WriteLine( $"Total winnings: {SumWinnings( ref hands )}" );
 
         // Part II
-        Hand[] handsWildcardJoker = [.. Hand.Parse( inputFilePath, true ).OrderBy( x => x, new HandWildcardJokerComparer())];
+        Hand[] handsWildcardJoker = [.. Hand.Parse( inputFilePath, isJokerWildcard: true ).OrderBy( x => x, new HandWildcardJokerComparer())];
         
         WriteLine( $"Total winnings with wildcard Joker: {SumWinnings( ref handsWildcardJoker )}" );
     }
