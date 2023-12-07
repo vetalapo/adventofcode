@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public class Hand : IComparable
 {
-    private static readonly Dictionary<char, byte> _labelMap = new()
+    private static readonly Dictionary<char, byte> _cardMap = new()
     {
         { 'A', 1 },
         { 'K', 2 },
@@ -41,7 +41,7 @@ public class Hand : IComparable
 
     public int CompareTo( object? obj )
     {
-        return Compare( this, obj, _labelMap );
+        return Compare( this, obj, _cardMap );
     }
 
     public static int Compare( object? a, object? b, Dictionary<char, byte> labelMap )

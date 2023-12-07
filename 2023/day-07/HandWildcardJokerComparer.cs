@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public class HandWildcardJokerComparer : IComparer<Hand>
 {
-    private static readonly Dictionary<char, byte> _labelMapWildcardJoker = new()
+    private static readonly Dictionary<char, byte> _cardMapWildcardJoker = new()
     {
         { 'A', 1 },
         { 'K', 2 },
@@ -21,6 +21,6 @@ public class HandWildcardJokerComparer : IComparer<Hand>
 
     public int Compare( Hand? a, Hand? b )
     {
-        return Hand.Compare( a, b, _labelMapWildcardJoker );
+        return Hand.Compare( a, b, _cardMapWildcardJoker );
     }
 }
