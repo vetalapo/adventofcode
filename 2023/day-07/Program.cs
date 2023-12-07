@@ -13,11 +13,16 @@ public class Program
             inputFilePath = args[0];
         }
 
-        if ( !File.Exists( inputFilePath ) )
+        // Part I
+        Hand[] hands = [.. Hand.Parse( inputFilePath ).Order()];
+        
+        long totalWinnings = 0;
+
+        for ( int i = 0; i < hands.Length; i++ )
         {
-            throw new FileNotFoundException( $"Input file not fount at [{inputFilePath}]" );
+            totalWinnings += (i + 1) * hands[i].Bid;
         }
 
-        WriteLine( $"Day 7 Advent of code! Hello!\nInput File: {inputFilePath}" );
+        WriteLine( $"Total winnings: {totalWinnings}" );
     }
 }
