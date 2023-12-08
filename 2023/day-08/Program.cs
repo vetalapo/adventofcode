@@ -13,11 +13,11 @@ public class Program
             inputFilePath = args[0];
         }
 
-        if ( !File.Exists( inputFilePath ) )
-        {
-            throw new FileNotFoundException( $"File not fount at: {inputFilePath}" );
-        }
+        // Part I
+        Network network = new( inputFilePath );
 
-        WriteLine( $"Hello, day 8 of Advent of Code! File path: [{inputFilePath}]" );
+        network.IterateFromToKey( "AAA", "ZZZ" );
+
+        WriteLine( $"Amount of steps to reach ZZZ: {network.Count}" );
     }
 }
