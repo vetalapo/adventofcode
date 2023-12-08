@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Windows.Input;
 
 namespace AdventOfCode;
 
@@ -6,8 +7,6 @@ public partial class Network : IEnumerable, IEnumerator
 {
     // Map
     private readonly Dictionary<string, Node> _map = [];
-
-    private readonly Dictionary<string, (bool Left, bool Right)> _visitMap = [];
     
     private string _currentNodeIndex = string.Empty;
 
@@ -82,50 +81,62 @@ public partial class Network : IEnumerable, IEnumerator
 
         bool isLeft = CurrentInstruction.Instruction == InstructionType.Left;
 
-        this._visitMap[this._currentNodeIndex] = (Left: isLeft, Right: !isLeft );
-
         this._currentNodeIndex = isLeft ? node.Left : node.Right;
-
-        if ( this._visitMap[this._currentNodeIndex].Left && this._visitMap[this._currentNodeIndex].Right )
-        {
-            return false;
-        }
 
         return this._currentNodeIndex != ( String.IsNullOrEmpty( this._keyLimiter ) ? this.LastKey : this._keyLimiter );
     }
 
-    public void IterateAll( )
+    public void Reset()
     {
-        foreach( Map item in this ) { }
+        this._instructionPosition = -1;
+        this._currentNodeIndex = string.Empty;
+        this._counter = 0;
+        this._keyLimiter = string.Empty;
     }
 
-    public void IterateUntillKey( string key )
+    // Class Methods
+    public long Steps()
     {
-        this._keyLimiter = key;
-
         foreach( Map item in this ) { }
+
+        long steps = this._counter;
+        
+        Reset();
+
+        return steps;
     }
 
-    public void IterateFromToKey( string startNodeIndex, string endNodeIndex )
+    public long Steps( string endKey )
+    {
+        this._keyLimiter = endKey;
+
+        foreach( Map item in this ) { }
+
+        long steps = this._counter;
+
+        Reset();
+
+        return steps;
+    }
+
+    public long Steps( string startNodeIndex, string endNodeIndex )
     {
         this._currentNodeIndex = startNodeIndex;
         this._keyLimiter = endNodeIndex;
 
         foreach( Map item in this ) { }
+
+        long steps = this._counter;
+
+        Reset();
+
+        return steps;
     }
 
-    public void Reset()
-    {
-        _instructionPosition = -1;
-        _currentNodeIndex = string.Empty;
-    }
-
-    // Class Methods
 
     public void AddNode( string key, Node node )
     {
         this._map.Add( key, node );
-        this._visitMap.Add( key, (Left: false, Right: false) );
     }
 
     private void Parse( string inputFilePath )

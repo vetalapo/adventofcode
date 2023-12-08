@@ -13,11 +13,11 @@ public class Program
             inputFilePath = args[0];
         }
 
-        // Part I
         Network network = new( inputFilePath );
 
-        network.IterateFromToKey( "AAA", "ZZZ" );
+        // Part I
+        long steps = network.Steps( "AAA", "ZZZ" );
 
-        WriteLine( $"Amount of steps to reach ZZZ: {network.Count}" );
+        WriteLine( $"Amount of steps to reach ZZZ: {steps}" );
     }
 }
