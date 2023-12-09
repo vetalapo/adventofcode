@@ -24,7 +24,7 @@ public class Program
         
         //
         // Part II
-        // Brute forse will take forewer, input is done in such a way
+        // Brute force will take forever, input is done in such a way
         // so doing Least common multiple (LCM) will make it a lot faster
         // but first calc distances from each starting point to their Z value
         //
@@ -34,7 +34,7 @@ public class Program
 
         List<Network> networks = [];
 
-        // Create nets of maps, set initial pointers, remove key limiter to run indefinetely ( if needed )
+        // Create nets of maps, set initial pointers, remove key limiter to run indefinitely ( if needed )
         foreach ( string node in startNodes )
         {
             Network net = new( inputFilePath );
