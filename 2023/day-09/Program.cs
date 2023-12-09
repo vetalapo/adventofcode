@@ -13,9 +13,16 @@ public class Program
             inputFilePath = args[0];
         }
 
+        Sequencer sequencer = new( inputFilePath );
+
         // Part I
-        IEnumerable<long> lastPredictedNums = Sequencer.ProcessSequences( inputFilePath );
+        IEnumerable<long> lastPredictedNums = sequencer.ProcessSequencesForward();
 
         WriteLine( $"The sum of the extrapolated values: {lastPredictedNums.Sum()}" );
+
+        // Part II
+        IEnumerable<long> predictedHistoryNums = sequencer.ProcessSequencesBackwards();
+
+        WriteLine( $"The sum of the historically extrapolated values: {predictedHistoryNums.Sum()}" );
     }
 }

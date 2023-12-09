@@ -1,18 +1,26 @@
 namespace AdventOfCode;
 
-public class Sequencer
+public class Sequencer( string inputFilePath )
 {
-    public static IEnumerable<long> ProcessSequences ( string inputFilePath )
-    {
-        IEnumerable<IEnumerable<long>> sequences = Sequencer.Parse( inputFilePath );
+    private readonly IEnumerable<IEnumerable<long>> _sequences = Parse( inputFilePath );
 
-        foreach( IEnumerable<long> seq in sequences )
+    public IEnumerable<long> ProcessSequencesForward()
+    {
+        foreach( IEnumerable<long> seq in this._sequences )
         {
-            yield return seq.Last() + DownSequence( seq.ToArray() )[^1];
+            yield return seq.Last() + FutureSequence( seq.ToArray() )[^1];
         }
     }
 
-    public static long[] DownSequence( long[] seq )
+    public IEnumerable<long> ProcessSequencesBackwards()
+    {
+        foreach( IEnumerable<long> seq in this._sequences )
+        {
+            yield return seq.First() - DownSequence( seq.ToArray() )[0];
+        }
+    }
+
+    public static long[] FutureSequence( long[] seq )
     {
         if ( seq.All( n => n == 0 ) )
         {
@@ -26,9 +34,37 @@ public class Sequencer
             result[j] = seq[i + 1] - seq[i];
         }
 
-        long[] recursiveRes = DownSequence( result );
+        long[] recursiveRes = FutureSequence( result );
 
         return [..result, result[^1] + recursiveRes[^1] ];
+    }
+
+    public static long[] DownSequence( long[] seq )
+    {
+        if ( seq.All( n => n == 0 ) )
+        {
+            return seq;
+        }
+
+        long[] mainSeq = new long[ seq.Length - 1 ];
+
+        for ( int i = 0, j = 0; i < seq.Length - 1; i++, j++ )
+        {
+            mainSeq[j] = seq[i + 1] - seq[i];
+        }
+
+        long[] recursiveRes = DownSequence( mainSeq );
+        
+        // Compiling result
+        long[] finSeq = new long[mainSeq.Length + 1];
+        finSeq[0] = mainSeq[0] - recursiveRes[0];
+
+        for ( int i = 1; i < finSeq.Length; i++ )
+        {
+            finSeq[i] = mainSeq[i - 1];
+        }
+
+        return finSeq;
     }
 
     public static IEnumerable<IEnumerable<long>> Parse( string inputFilePath )
