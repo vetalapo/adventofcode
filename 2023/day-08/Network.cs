@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Windows.Input;
 
 namespace AdventOfCode;
 
@@ -26,13 +25,14 @@ public partial class Network : IEnumerable, IEnumerator
     {
         Parse( inputFilePath );
 
-        this._currentNodeIndex = this.FirstKey;
+        this._currentNodeIndex = this.FirstInputKey;
+        this._keyLimiter = this.LastInputKey;
     }
 
     // Public fields, and enumeration
-    public string FirstKey => this._map.FirstOrDefault().Key;
+    public string FirstInputKey => this._map.FirstOrDefault().Key;
 
-    public string LastKey => this._map.LastOrDefault().Key;
+    public string LastInputKey => this._map.LastOrDefault().Key;
 
     public long Count => this._counter;
 
@@ -83,13 +83,23 @@ public partial class Network : IEnumerable, IEnumerator
 
         this._currentNodeIndex = isLeft ? node.Left : node.Right;
 
-        return this._currentNodeIndex != ( String.IsNullOrEmpty( this._keyLimiter ) ? this.LastKey : this._keyLimiter );
+        return this._currentNodeIndex != this._keyLimiter;
+    }
+
+    public void SetStartPoint( string startNodeIndex )
+    {
+        this._currentNodeIndex = startNodeIndex;
+    }
+
+    public void RemoveKeyLimiter()
+    {
+        this._keyLimiter = string.Empty;
     }
 
     public void Reset()
     {
         this._instructionPosition = -1;
-        this._currentNodeIndex = string.Empty;
+        SetStartPoint( string.Empty );
         this._counter = 0;
         this._keyLimiter = string.Empty;
     }
@@ -121,7 +131,8 @@ public partial class Network : IEnumerable, IEnumerator
 
     public long Steps( string startNodeIndex, string endNodeIndex )
     {
-        this._currentNodeIndex = startNodeIndex;
+        SetStartPoint( startNodeIndex );
+
         this._keyLimiter = endNodeIndex;
 
         foreach( Map item in this ) { }
@@ -133,6 +144,16 @@ public partial class Network : IEnumerable, IEnumerator
         return steps;
     }
 
+    public IEnumerable<string> StartNodes( char startCharacter )
+    {
+        foreach( KeyValuePair<string, Node> item in this._map )
+        {
+            if ( item.Key.EndsWith( startCharacter ) )
+            {
+                yield return item.Key;
+            }
+        }
+    }
 
     public void AddNode( string key, Node node )
     {
