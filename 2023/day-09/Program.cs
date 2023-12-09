@@ -13,11 +13,9 @@ public class Program
             inputFilePath = args[0];
         }
 
-        if ( !File.Exists( inputFilePath ) )
-        {
-            throw new FileNotFoundException( $"File not fount at: {inputFilePath}" );
-        }
+        // Part I
+        IEnumerable<long> lastPredictedNums = Sequencer.ProcessSequences( inputFilePath );
 
-        WriteLine( $"Hello, day 9! Input file: {inputFilePath}" );
+        WriteLine( $"The sum of the extrapolated values: {lastPredictedNums.Sum()}" );
     }
 }
