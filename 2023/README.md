@@ -1,10 +1,10 @@
-<img src="./assets/c-sharp-logo.png" alt="C-Sharp logo" style="float: right; width: 64;">
+<img src="./assets/c-sharp-logo.png" alt="C-Sharp logo" style="float: right; width: 40px; height: 40px;">
 
 # 🎄Advent of Code 2023 🎅
 
 Solutions for [Advent of Code][aoc-cite] programming puzzles in [C-Sharp][c-sharp-lang-repo]
 
-Everything is self contained. No 3-rd party libraries, parsers and etc. I use only what .Net provides. Most solution setup to use Visual Studio Code.
+Everything is self contained. No 3-rd party libraries, parsers and etc. I use only what .Net provides. Most solutions setup to use Visual Studio Code.
 
 <div style="text-align: center;">
   
