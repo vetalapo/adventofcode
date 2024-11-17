@@ -13,11 +13,8 @@ public class Program
             inputFilePath = args[0];
         }
 
-        if ( !File.Exists( inputFilePath ) )
-        {
-            throw new FileNotFoundException( $"File not found at: {inputFilePath}" );
-        }
+        Walker walker = new( inputFilePath );
 
-        WriteLine( $"Hello, day 10! Input file: {inputFilePath}" );
+        WriteLine( $"Steps to the point farthest from the starting position: {walker.CalcFarthestDistanceFromStart()}" );
     }
 }
