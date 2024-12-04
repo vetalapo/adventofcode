@@ -163,7 +163,6 @@ int upCount( char matrix[][200], int sideLength, position pos, char pattern[], i
     pos.row--;
 
     return upCount( matrix, sideLength, pos, pattern, patternLength, patternIndex + 1 );
-
 }
 
 int downCount( char matrix[][200], int sideLength, position pos, char pattern[], int patternLength, int patternIndex )
@@ -181,7 +180,6 @@ int downCount( char matrix[][200], int sideLength, position pos, char pattern[],
     pos.row++;
 
     return downCount( matrix, sideLength, pos, pattern, patternLength, patternIndex + 1 );
-
 }
 
 int upDiagLeftCount( char matrix[][200], int sideLength, position pos, char pattern[], int patternLength, int patternIndex )
@@ -236,7 +234,6 @@ int downDiagLeftCount( char matrix[][200], int sideLength, position pos, char pa
     pos.col--;
 
     return downDiagLeftCount( matrix, sideLength, pos, pattern, patternLength, patternIndex + 1 );
-
 }
 
 int downDiagRightCount( char matrix[][200], int sideLength, position pos, char pattern[], int patternLength, int patternIndex )
