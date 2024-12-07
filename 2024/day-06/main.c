@@ -68,7 +68,6 @@ int main( int argc, char *argv[] )
     int amountOfLoops = countLoopsWithObstacle( map, mapSize, guardPosition, direction );
     
     // Print out results
-    printf( "\n" );
     printf( "Amount of distinct positions: %d\n", amountOfDistinctPosition );
     printf( "Amount of loops: %d\n", amountOfLoops );
 
@@ -176,7 +175,7 @@ int countLoopsWithObstacle( char initMap[150][150], int mapSize, position initGu
 {
     int counter = 0;
 
-    for ( int oRow = initGuardPosition.row; oRow < mapSize; oRow++ )
+    for ( int oRow = 0; oRow < mapSize; oRow++ )
     {
         for ( int oCol = 0; oCol < mapSize; oCol++ )
         {
@@ -218,11 +217,15 @@ bool isLoop( char map[150][150], int mapSize, position initGuardPosition, char i
     while ( guardPosition.row >= 0 && guardPosition.row < mapSize && 
             guardPosition.col >= 0 && guardPosition.col < mapSize )
     {
+        //
+        // Dumb and inefficient, but works to solve the problem for now
         loopCheck++;
-        if ( loopCheck > 10000 )
+        if ( loopCheck > 7000 )
         {
             return true;
         }
+        //
+        //
 
         switch ( direction )
         {
