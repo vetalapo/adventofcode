@@ -8,7 +8,7 @@ int getMidReordered( char orderings[3000][5], int orderingsSize, char rule[25][3
 
 int main( int argc, char *argv[] )
 {
-    // Handl args
+    // Handle args
     char input[25] = "input.txt";
 
     if ( argc > 1 )
@@ -121,10 +121,8 @@ int getMidReordered( char orderings[3000][5], int orderingsSize, char rule[25][3
     {
         for ( int j = i + 1; j < ruleSize; j++ )
         {
-            char currToken[5];
             char currRevToken[5];
 
-            snprintf( currToken, 5, "%s%s", rule[i], rule[j] );
             snprintf( currRevToken, 5, "%s%s", rule[j], rule[i] );
 
             for ( int o = 0; o < orderingsSize; o++ )
@@ -143,7 +141,6 @@ int getMidReordered( char orderings[3000][5], int orderingsSize, char rule[25][3
                     strcpy_s( rule[j], 3, temp );
                 }
             }
-
         }
     }
 
