@@ -104,7 +104,12 @@ calibration getCalibrationResult( char line[], int lineSize )
     calibration result;
 
     result.doubleCalibration = canBeCombined( numbersPtr, numbersIndex, testNum, numbersPtr[0], 1 ) ? testNum : 0;
-    result.tripleCalibration = canBeCombinedAndConcatenated( numbersPtr, numbersIndex, testNum, numbersPtr[0], 1 ) ? testNum : 0;
+    
+    result.tripleCalibration = result.doubleCalibration != 0
+        ? result.doubleCalibration
+        : canBeCombinedAndConcatenated( numbersPtr, numbersIndex, testNum, numbersPtr[0], 1 )
+            ? testNum
+            : 0;
 
     free( numbersPtr );
 
