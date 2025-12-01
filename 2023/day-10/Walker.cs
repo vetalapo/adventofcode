@@ -1,14 +1,16 @@
+using static System.Console;
+
 namespace AdventOfCode;
 
 public class Walker
 {
-    public readonly char[][] Field;
+    public readonly PipeDirection[][] Field;
 
-    public readonly Coords StartingPosition;
+    public readonly Coordinate StartingPosition;
 
     public Walker( string inputFilePath )
     {
-        (char[][] Field, Coords StartingPosition) parseResult = Parse( inputFilePath );
+        (PipeDirection[][] Field, Coordinate StartingPosition) parseResult = Parse( inputFilePath );
         
         this.Field = parseResult.Field;
         this.StartingPosition = parseResult.StartingPosition;
@@ -16,48 +18,38 @@ public class Walker
 
     public int CalcFarthestDistanceFromStart()
     {
-        Coords left = this.StartingPosition;
-        Coords right = this.StartingPosition;
+        WriteLine( StartingPosition );
 
-        do
-        {
-        }
-        while ( left.X == right.X && left.Y == right.Y );
-
-        return Math.Max( left.Steps, right.Steps );
+        return 0;
     }
 
-    private static (char[][] Field, Coords StartingPosition ) Parse( string inputFilePath )
+    private static ( PipeDirection[][] Field, Coordinate StartingPosition ) Parse( string inputFilePath )
     {
         if ( !File.Exists( inputFilePath ) )
         {
             throw new FileNotFoundException( $"File not found at: {inputFilePath}" );
         }
 
-        List<char[]> fieldResult = [];
-        Coords coords = new( 0, 0 );
-        
         string[] lines = File.ReadAllLines( inputFilePath );
 
+        PipeDirection[][] fieldResult = new PipeDirection[lines.Length][];
+        Coordinate startingPosition = new( 0, 0 );
+        
         for ( int i = 0; i < lines.Length; i++ )
         {
-            string line = lines[i];
+            fieldResult[i] = new PipeDirection[lines[i].Length];
 
-            char[] chars = new char[line.Length];
-
-            for ( int j = 0; j < line.Length; j++ )
+            for ( int j = 0; j < lines[i].Length; j++ )
             {
-                chars[j] = line[j];
+                fieldResult[i][j] = Types.DirectionMap[lines[i][j]];
 
-                if ( line[j] == 'S' )
+                if ( fieldResult[i][j] == PipeDirection.StartingPosition )
                 {
-                    coords = new Coords( i, j );
+                    startingPosition = new Coordinate( i, j );
                 }
             }
-
-            fieldResult.Add( chars );
         }
 
-        return ([.. fieldResult], coords );
+        return (fieldResult, startingPosition);
     }
 }

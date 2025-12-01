@@ -2,7 +2,7 @@ namespace AdventOfCode;
 
 public static class Types
 {
-    public static Dictionary<char, PipeDirection> Direction = new()
+    public static Dictionary<char, PipeDirection> DirectionMap = new()
     {
         { '|', PipeDirection.NorthAndSouth },
         { '-', PipeDirection.EastAndWest },
@@ -10,15 +10,15 @@ public static class Types
         { 'J', PipeDirection.NorthAndWest },
         { '7', PipeDirection.SouthAndWest },
         { 'F', PipeDirection.SouthAndEast },
-        { '.', PipeDirection.NoDirection }
+        { '.', PipeDirection.NoDirection },
+        { 'S', PipeDirection.StartingPosition }
     };
 }
 
-public struct Coords( int x, int y )
+public struct Coordinate( int x, int y )
 {
     public int X => x;
     public int Y => y;
-    public int Steps = 0;
 
     public override string ToString() => $"({X}, {Y})";
 }
@@ -31,5 +31,6 @@ public enum PipeDirection
     NorthAndWest,
     SouthAndEast,
     SouthAndWest,
-    NoDirection
+    NoDirection,
+    StartingPosition
 }
