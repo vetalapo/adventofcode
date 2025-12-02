@@ -14,6 +14,8 @@ let pointingZeroCount = 0;
 let traveledPastZero = 0;
 
 for (const line of lines) {
+    traveledPastZero += countClicksAtZero(dial, line);
+
     dial = line.direction === 'L'
         ? dial - line.clicks
         : dial + line.clicks;
@@ -31,3 +33,32 @@ for (const line of lines) {
 
 console.log("Actual password to open the door:", pointingZeroCount);
 console.log("Password to open the door (0x434C49434B method):", traveledPastZero);
+
+//
+// Helper Functions
+//
+function countClicksAtZero(dl, line) {
+    let count = 0;
+
+    for (let i = 0; i < line.clicks; i++) {
+        if (line.direction === 'L') {
+            dl--;
+
+            if (dl < 0) {
+                dl += 100;
+            }
+        } else {
+            dl++;
+
+            if (dl >= 100) {
+                dl -= 100;
+            }
+        }
+
+        if (dl === 0) {
+            count++;
+        }
+    }
+
+    return count;
+}
