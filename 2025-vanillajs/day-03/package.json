@@ -1,0 +1,12 @@
+{
+    "name": "day-01",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "clear && node --watch index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "@vetalapo"
+}
